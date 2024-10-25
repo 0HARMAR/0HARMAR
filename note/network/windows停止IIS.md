@@ -1,0 +1,2 @@
+powershell里执行
+Stop-Service W3SVC

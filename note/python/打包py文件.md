@@ -1,0 +1,1 @@
+pyinstaller --onefile your_script.py --name executable_name
