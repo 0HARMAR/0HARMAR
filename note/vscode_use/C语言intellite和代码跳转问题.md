@@ -1,0 +1,7 @@
+在c_cpp_properties.json文件里
+配置includepath 和 browse里的path
+将头文件的路径放到里面
+
+includepath 通常用于IntelliSense 的代码分析，检查程序错误
+
+browse里的path通常用于代码跳转
