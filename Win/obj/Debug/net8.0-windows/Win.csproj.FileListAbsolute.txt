@@ -1,0 +1,14 @@
+C:\Just-For-Fun\Win\bin\Debug\net8.0-windows\Win.exe
+C:\Just-For-Fun\Win\bin\Debug\net8.0-windows\Win.deps.json
+C:\Just-For-Fun\Win\bin\Debug\net8.0-windows\Win.runtimeconfig.json
+C:\Just-For-Fun\Win\bin\Debug\net8.0-windows\Win.dll
+C:\Just-For-Fun\Win\bin\Debug\net8.0-windows\Win.pdb
+C:\Just-For-Fun\Win\obj\Debug\net8.0-windows\Win.GeneratedMSBuildEditorConfig.editorconfig
+C:\Just-For-Fun\Win\obj\Debug\net8.0-windows\Win.AssemblyInfoInputs.cache
+C:\Just-For-Fun\Win\obj\Debug\net8.0-windows\Win.AssemblyInfo.cs
+C:\Just-For-Fun\Win\obj\Debug\net8.0-windows\Win.csproj.CoreCompileInputs.cache
+C:\Just-For-Fun\Win\obj\Debug\net8.0-windows\Win.dll
+C:\Just-For-Fun\Win\obj\Debug\net8.0-windows\refint\Win.dll
+C:\Just-For-Fun\Win\obj\Debug\net8.0-windows\Win.pdb
+C:\Just-For-Fun\Win\obj\Debug\net8.0-windows\Win.genruntimeconfig.cache
+C:\Just-For-Fun\Win\obj\Debug\net8.0-windows\ref\Win.dll

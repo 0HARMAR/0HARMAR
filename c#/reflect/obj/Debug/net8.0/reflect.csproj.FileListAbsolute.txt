@@ -1,0 +1,14 @@
+C:\Just-For-Fun\c#\reflect\bin\Debug\net8.0\reflect.exe
+C:\Just-For-Fun\c#\reflect\bin\Debug\net8.0\reflect.deps.json
+C:\Just-For-Fun\c#\reflect\bin\Debug\net8.0\reflect.runtimeconfig.json
+C:\Just-For-Fun\c#\reflect\bin\Debug\net8.0\reflect.dll
+C:\Just-For-Fun\c#\reflect\bin\Debug\net8.0\reflect.pdb
+C:\Just-For-Fun\c#\reflect\obj\Debug\net8.0\reflect.GeneratedMSBuildEditorConfig.editorconfig
+C:\Just-For-Fun\c#\reflect\obj\Debug\net8.0\reflect.AssemblyInfoInputs.cache
+C:\Just-For-Fun\c#\reflect\obj\Debug\net8.0\reflect.AssemblyInfo.cs
+C:\Just-For-Fun\c#\reflect\obj\Debug\net8.0\reflect.csproj.CoreCompileInputs.cache
+C:\Just-For-Fun\c#\reflect\obj\Debug\net8.0\reflect.dll
+C:\Just-For-Fun\c#\reflect\obj\Debug\net8.0\refint\reflect.dll
+C:\Just-For-Fun\c#\reflect\obj\Debug\net8.0\reflect.pdb
+C:\Just-For-Fun\c#\reflect\obj\Debug\net8.0\reflect.genruntimeconfig.cache
+C:\Just-For-Fun\c#\reflect\obj\Debug\net8.0\ref\reflect.dll

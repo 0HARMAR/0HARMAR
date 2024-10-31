@@ -1,0 +1,5 @@
+#!/bin/bash
+
+as add.asm --gdwarf-2 -o add.o
+
+ld add.o -o add

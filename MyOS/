@@ -1,0 +1,8 @@
+.section .text
+    .globl _start       
+
+_start:
+    mov $0x3, %rax
+    mov $0x1, %rdi
+    add %rax, %rbx
+
