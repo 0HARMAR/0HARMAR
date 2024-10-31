@@ -1,0 +1,1 @@
+savedcmd_/mnt/Just-For-Fun/C++/linuxsyscall/kernelmodule.mod := printf '%s\n'   kernelmodule.o | awk '!x[$$0]++ { print("/mnt/Just-For-Fun/C++/linuxsyscall/"$$0) }' > /mnt/Just-For-Fun/C++/linuxsyscall/kernelmodule.mod

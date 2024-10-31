@@ -1,0 +1,1 @@
+savedcmd_/mnt/Just-For-Fun/C++/linuxsyscall/Module.symvers :=  scripts/mod/modpost -M -m -a      -o /mnt/Just-For-Fun/C++/linuxsyscall/Module.symvers -T /mnt/Just-For-Fun/C++/linuxsyscall/modules.order -i Module.symvers -e 

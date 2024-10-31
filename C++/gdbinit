@@ -1,0 +1,24 @@
+define print_changed_regs
+    set $prev_regs = $pc
+    set $changed = 0
+    set $curr_regs = $pc
+
+    foreach reg ($prev_regs)
+        if ($prev_regs[reg] != $curr_regs[reg])
+            set $changed = 1
+            printf "%s changed: 0x%x -> 0x%x\n", reg, $prev_regs[reg], $curr_regs[reg]
+        end
+    end
+
+    if ($changed == 0)
+        printf "No registers changed.\n"
+    end
+end
+
+define hook-step
+    print_changed_regs
+end
+
+source /path/to/this/script
+
+

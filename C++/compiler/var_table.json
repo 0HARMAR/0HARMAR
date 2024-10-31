@@ -1,0 +1,28 @@
+{
+    "var": [
+        {
+            "name": "a",
+            "scope": "global",
+            "type": "int",
+            "value": 1
+        },
+        {
+            "name": "b",
+            "scope": "global",
+            "type": "int",
+            "value": 2
+        },
+        {
+            "name": "c",
+            "scope": "global",
+            "type": "int",
+            "value": 10
+        },
+        {
+            "name": "d",
+            "scope": "global",
+            "type": "int",
+            "value": 20
+        }
+    ]
+}
