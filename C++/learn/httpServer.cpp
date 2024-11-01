@@ -8,9 +8,9 @@ using boost::asio::ip::tcp;
 
 void session(tcp::socket sock) {
     try {
-        char data[1024];
-        while (true) {
-            boost::system::error_code error;
+        char data[1024]
+        while (true){
+            boost::system::error_code error; //创建一个boost::system::error_code类型的变量
             size_t length = sock.read_some(boost::asio::buffer(data), error);
             if (error == boost::asio::error::eof) break; // Connection closed cleanly by peer
             else if (error) throw boost::system::system_error(error); // Some other error
