@@ -1,15 +1,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <direct.h>
+#include <string.h>
 
-int main(){
+int main(int argc,char* argv[]){
     //change the current powershell session coding
     const char *setEncodingCommand = "powershell -ExecutionPolicy Bypass -File " 
     "C:\\Just-For-Fun\\C++\\compiler\\set_encoding.ps1";
     system(setEncodingCommand);
     //first step 
     //execute lexer,generate tokens.json
-    const char *command1 = "python C:\\Just-For-Fun\\C++\\compiler\\lexer.py";
+    const char * src_path = argv[1];
+    char command1[50] = "python C:\\Just-For-Fun\\C++\\compiler\\lexer.py ";
+    strcat(command1,src_path);
     int result = system(command1);
     if (result == 0){
         printf("执行成功");

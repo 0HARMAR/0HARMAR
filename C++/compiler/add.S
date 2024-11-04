@@ -13,7 +13,4 @@ _start:
 	addq $6, %rbx
 	addq $7, %rcx
 	addq $27, %rcx
-	movq $60, %rax
-	xor %rdi, %rdi
-	syscall
-
+	addq $8, %
