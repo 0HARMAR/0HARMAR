@@ -7,58 +7,7 @@
         "children": null
       },
       {
-        "data": "b",
-        "children": null
-      },
-      {
-        "data": "b",
-        "children": null
-      },
-      {
-        "data": "a",
-        "children": null
-      }
-    ]
-  },
-  {
-    "data": "c",
-    "children": [
-      {
-        "data": "b",
-        "children": null
-      },
-      {
-        "data": "a",
-        "children": null
-      }
-    ]
-  },
-  {
-    "data": "c",
-    "children": [
-      {
-        "data": "d",
-        "children": null
-      },
-      {
         "data": "c",
-        "children": null
-      }
-    ]
-  },
-  {
-    "data": "",
-    "children": [
-      {
-        "data": "a",
-        "children": null
-      },
-      {
-        "data": "b",
-        "children": null
-      },
-      {
-        "data": "a",
         "children": null
       }
     ]

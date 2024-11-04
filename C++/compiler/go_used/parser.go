@@ -4,6 +4,29 @@ import (
 	"fmt"
 )
 
+func get_func_num(data [][]string) int {
+	func_num := 1
+	data, status := rtokens()
+	if status {
+		for _, line := range data {
+			if line[0] == "func" {
+				func_num += 1
+			}
+		}
+	}
+
+	return func_num
+}
+
+func divide_by_function(data [][]string) {
+	var main [][]string
+	for _, line := range data {
+		if line[0] != "func" {
+			main = append(main, line)
+		}
+	}
+}
+
 func main() {
 	//first step
 	//read tokens,divide the code by function

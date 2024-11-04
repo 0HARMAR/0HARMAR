@@ -1,16 +1,15 @@
 .section .data
-a:      .quad 1
-b:      .quad 2
+a:      .quad 11
 c:      .quad 10
-d:      .quad 20
+b:      .quad 30
 .section .text
 .global _start
 _start:
 	movq a(%rip), %rax
-	movq b(%rip), %rbx
-	movq c(%rip), %rcx
-	movq d(%rip), %rdx
-	addq $6, %rbx
-	addq $7, %rcx
-	addq $27, %rcx
-	addq $8, %
+	movq c(%rip), %rbx
+	movq b(%rip), %rcx
+	addq $21, %rcx
+	movq $60, %rax
+	xor %rdi, %rdi
+	syscall
+

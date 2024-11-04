@@ -4,13 +4,7 @@
             "name": "a",
             "scope": "global",
             "type": "int",
-            "value": 1
-        },
-        {
-            "name": "b",
-            "scope": "global",
-            "type": "int",
-            "value": 2
+            "value": 11
         },
         {
             "name": "c",
@@ -19,10 +13,10 @@
             "value": 10
         },
         {
-            "name": "d",
+            "name": "b",
             "scope": "global",
             "type": "int",
-            "value": 20
+            "value": 30
         }
     ]
 }

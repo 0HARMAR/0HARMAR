@@ -15,7 +15,7 @@ int main(int argc,char* argv[]){
     strcat(command1,src_path);
     int result = system(command1);
     if (result == 0){
-        printf("执行成功");
+        printf("词法分析成功");
     }
     else{
         perror("执行失败");
@@ -32,7 +32,7 @@ int main(int argc,char* argv[]){
     //second step
     // execute paser,generate syntax_tree.json
     if (system("go run .") == 0){
-        printf("运行成功");
+        printf("语法分析成功");
     }
     else{
         perror("运行失败");
@@ -49,7 +49,7 @@ int main(int argc,char* argv[]){
     }
 
     if(system("C:\\Just-For-Fun\\C++\\compiler\\semantic_analyzor.exe")==0){
-        printf("运行成功");
+        printf("语义分析成功");
     }
     else{
         perror("运行失败");
@@ -60,7 +60,7 @@ int main(int argc,char* argv[]){
 
     const char *command2 = "python C:\\Just-For-Fun\\C++\\compiler\\object_code_generate.py";
     if (system(command2) == 0){
-        printf("执行成功");
+        printf("目标代码生成成功");
     }
     else{
         perror("执行失败");
