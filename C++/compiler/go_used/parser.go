@@ -14,25 +14,57 @@ func get_func_num(data [][]string) int {
 			}
 		}
 	}
-
 	return func_num
 }
 
-func divide_by_function(data [][]string) {
+// accept one file tokens
+// divide the tokens according to
+// functions ,ruturn slice of [][]string
+func divide_by_function(data [][]string) [][][]string {
+	var func_index map[string]map[int]int
+	func_index["main"] = map[int]int{
+		0: len(data),
+	}
+	func_num := get_func_num(data)
 	var main [][]string
-	for _, line := range data {
-		if line[0] != "func" {
+	var is_in_main bool = true
+	var current_func_name string = "main"
+	var current_func_start_index int = 0
+	for index, line := range data {
+		is_in_main = true
+		if line[0] != "func" && line[0] != "\t" {
 			main = append(main, line)
+		} else if line[0] == "func" {
+			is_in_main = false
+			current_func_name = line[1]
+			current_func_start_index = index
+		} else if line[0] == "\t" {
+			// data[index + 1] is next line
+			if data[index+1][0] != "\t" {
+				func_index[current_func_name] = map[int]int{
+					current_func_start_index: index,
+				}
+			}
 		}
 	}
+	fmt.Println(main)
+
+	for range make([]struct{}, func_num-1) {
+
+	}
+	return [][][]string{}
 }
 
-func main() {
-	//first step
-	//read tokens,divide the code by function
+// accept one function's tokens
+// and resolve the express in this
+// function ,rutun the result
+func resolve_express_func(tokens [][]string) {
 
-	//second step
-	//use paser for the each functions
+}
+
+// accept all function's resolved syntax
+// tree, generate the final syntax tree
+func generate_syntax_tree() {
 	data, status := rtokens()
 	if status {
 		var expresses [][]string
@@ -75,4 +107,20 @@ func main() {
 
 		write_to_json(dest_var, operand)
 	}
+}
+
+func main() {
+	//first step
+	//read tokens,divide the code by function
+
+	//second step
+	//use paser for the each functions
+
+	data, status := rtokens()
+	if status {
+		func_num := get_func_num(data)
+		fmt.Println(func_num)
+	}
+
+	divide_by_function(data)
 }
