@@ -17,3 +17,5 @@ int ret = calculate(c,d)
 func calculate (int a,int b) int
     int sum = a + b + a
     return sum
+
+int hmy = 111
