@@ -77,8 +77,8 @@ func resolve_express_func(tokens [][]string) []Node {
 			fmt.Println(expresses[i])
 		}
 
-		var dest_var []string
-		operand := make([][]string, len(expresses))
+		var dest_var []string                       // slice of distination varible
+		operand := make([][]string, len(expresses)) // slice of dest_var operand
 		for index, express := range expresses {
 			operand[index] = make([]string, 0)
 			dest_var = append(dest_var, express[0])
@@ -99,7 +99,22 @@ func resolve_express_func(tokens [][]string) []Node {
 			fmt.Println(operand)
 		}
 
-		write_to_json(dest_var, operand)
+		// now we have dest_var and
+		// oprand , and transform to
+		// struct []Node
+
+		var Nodes []Node
+		for i := 0; i < len(dest_var); i++ {
+			var node Node
+			node.Data = dest_var[i]
+			for j := 0; j < len(dest_var); j++ {
+				node_ := Node{
+					Data:     operand[i][j],
+					Children: nil,
+				}
+				node.Children = append(node.Children, &node_)
+			}
+		}
 	}
 }
 
@@ -143,7 +158,8 @@ func generate_syntax_tree(data [][]string) {
 				func_syntax_tree["main"] = resolve_express_func(main)
 			} else {
 				func_name := key
-				func_index[func_name]
+				func_tokens := generate_func_tokens(func_name, func_index, data)
+				func_syntax_tree[func_name] = resolve_express_func(func_tokens)
 			}
 			for key_, value_ := range value {
 				fmt.Println("start : ", key_)
