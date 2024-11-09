@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 )
 
 func get_func_num(data [][]string) int {
@@ -197,6 +199,20 @@ func write_per_func_tokens_toJson(data [][]string) {
 			jsonDate[func_name] = func_tokens
 		}
 	}
+
+	file, err := os.Create("tokens_func.json")
+	if err != nil {
+		fmt.Println("无法创建文件:", err)
+		return
+	}
+	defer file.Close()
+
+	// 将结构体编码为 JSON 并写入文件
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ") // 设置缩进格式
+	if err := encoder.Encode(jsonDate); err != nil {
+		fmt.Println("JSON 编码失败:", err)
+	}
 }
 
 func main() {
@@ -208,6 +224,6 @@ func main() {
 
 	data, status := rtokens()
 	if status {
-		generate_syntax_tree(data)
+		write_per_func_tokens_toJson(data)
 	}
 }

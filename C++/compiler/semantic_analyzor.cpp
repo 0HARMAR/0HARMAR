@@ -20,8 +20,8 @@ struct Variable {
     int value;  // 值
 };
 
-json create_var_table(const vector<Variable>& table){
-    json var_table;
+json create_var_table_json(vector<string> &func_names, map<string,vector<Variable>>){
+    json var_table_json;
     for(const auto& var : table){
         var_table["var"].push_back({
             {"name",var.name},
@@ -30,12 +30,32 @@ json create_var_table(const vector<Variable>& table){
             {"value",var.value},
         });
     }
-    return var_table;
+    return var_table_json;
 }
 
+map<string,vector<Variable>> generate_var_table(json json_obj){
+    // traverse per function
+    for (const auto &func : json_obj){
+        string func_name = func.first;
+        vector<vector<string>> func_tokens = func.second;
+    }
+    vector <Variable> var_table;
+    for(int i=0;i < json_obj.size();i++){
+        vector <string> line = json_obj[i];
+        Variable var;
+        if (line[0] == "int"){
+            var.type = "int";
+            var.name = line[1];
+            var.scope = "global";
+            var.value = stoi(line[3]);
+            var_name += var.name;
+            var_table.push_back(var);
+        }
+    }
+}
 
 int main(){
-    ifstream infile("go_used/tokens.json");
+    ifstream infile("go_used/tokens_func.json");
     if(!infile.is_open()){
         cerr << "connot open file tokens.json" << endl;
         return 1;
@@ -60,19 +80,6 @@ int main(){
 
     // create var table json file
 
-    vector <Variable> var_table;
-    for(int i=0;i < json_obj.size();i++){
-        vector <string> line = json_obj[i];
-        Variable var;
-        if (line[0] == "int"){
-            var.type = "int";
-            var.name = line[1];
-            var.scope = "global";
-            var.value = stoi(line[3]);
-            var_name += var.name;
-            var_table.push_back(var);
-        }
-    }
     // 打印验证
     for (const auto& var : var_table) {
         std::cout << "Name: " << var.name 
@@ -94,7 +101,3 @@ int main(){
 
     return 0;
 }
-// create var table
-
-
-//analyze syntax tree
