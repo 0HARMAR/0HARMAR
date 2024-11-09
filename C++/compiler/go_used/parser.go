@@ -57,65 +57,74 @@ func divide_by_function(data [][]string) ([][]string, map[string]map[int]int) {
 
 // accept one function's tokens
 // and resolve the express in this
-// function ,rutun the result
+// function ,rutun the []Node
+// per Node represents a express
+// []Node reprensents a func's express
+
 func resolve_express_func(tokens [][]string) []Node {
-	data, status := rtokens()
-	if status {
-		var expresses [][]string
-		for i := 0; i < len(data); i++ {
-			data_line := data[i]
-			fmt.Println("token 数:", len(data_line))
-			for j := 0; j < len(data_line); j++ {
-				if data_line[j] == "+" { // if line has '+',it is a express
-					expresses = append(expresses, data_line)
-					break
-				}
-			}
-		}
-		fmt.Println("总的表达式")
-		for i := 0; i < len(expresses); i++ { // print the express
-			fmt.Println(expresses[i])
-		}
-
-		var dest_var []string                       // slice of distination varible
-		operand := make([][]string, len(expresses)) // slice of dest_var operand
-		for index, express := range expresses {
-			operand[index] = make([]string, 0)
-			dest_var = append(dest_var, express[0])
-			count := 0
-			for j := 0; j < len(express); j++ { //count '+' num
-				if express[j] == "+" {
-					count += 1
-				}
-			}
-			fmt.Println(count)
-			for j := 0; j < len(express); j++ {
-				if express[j] == "+" {
-					op1 := express[j-1]
-					operand[index] = append(operand[index], op1)
-				}
-			}
-			operand[index] = append(operand[index], express[len(express)-1])
-			fmt.Println(operand)
-		}
-
-		// now we have dest_var and
-		// oprand , and transform to
-		// struct []Node
-
-		var Nodes []Node
-		for i := 0; i < len(dest_var); i++ {
-			var node Node
-			node.Data = dest_var[i]
-			for j := 0; j < len(dest_var); j++ {
-				node_ := Node{
-					Data:     operand[i][j],
-					Children: nil,
-				}
-				node.Children = append(node.Children, &node_)
+	var expresses [][]string
+	for i := 0; i < len(tokens); i++ {
+		data_line := tokens[i]
+		fmt.Println("token 数:", len(data_line))
+		for j := 0; j < len(data_line); j++ {
+			if data_line[j] == "+" { // if line has '+',it is a express
+				expresses = append(expresses, data_line)
+				break
 			}
 		}
 	}
+	fmt.Println("总的表达式")
+	for i := 0; i < len(expresses); i++ { // print the express
+		fmt.Println(expresses[i])
+	}
+
+	var dest_var []string                       // slice of distination varible
+	operand := make([][]string, len(expresses)) // slice of dest_var operand
+	for index, express := range expresses {
+		operand[index] = make([]string, 0)
+		// found left value
+		for index_ := 0; index_ < len(express); index_++ {
+			if express[index_] == "=" {
+				dest_var = append(dest_var, express[index_-1])
+			}
+		}
+		count := 0
+		for j := 0; j < len(express); j++ { //count '+' num
+			if express[j] == "+" {
+				count += 1
+			}
+		}
+		fmt.Println(count)
+		for j := 0; j < len(express); j++ {
+			if express[j] == "+" {
+				op1 := express[j-1]
+				operand[index] = append(operand[index], op1)
+			}
+		}
+		operand[index] = append(operand[index], express[len(express)-1])
+		fmt.Println(operand)
+	}
+
+	// now we have dest_var and
+	// oprand , and transform to
+	// struct []Node
+
+	var Nodes []Node
+	for i := 0; i < len(dest_var); i++ {
+		var node Node // head node
+		node.Data = dest_var[i]
+		for j := 0; j < len(operand[i]); j++ {
+			// child node
+			node_ := Node{
+				Data:     operand[i][j],
+				Children: nil,
+			}
+			node.Children = append(node.Children, &node_)
+		}
+
+		Nodes = append(Nodes, node)
+	}
+	return Nodes
 }
 
 func generate_func_tokens(func_name string,
@@ -167,6 +176,27 @@ func generate_syntax_tree(data [][]string) {
 			}
 		}
 	}
+
+	// now we get the func_syntax_tree
+	// with type map[string](func_name)[]Node(
+	// func syntax tree)
+
+	write_to_json(func_syntax_tree)
+}
+
+func write_per_func_tokens_toJson(data [][]string) {
+	var jsonDate map[string][][]string = make(map[string][][]string)
+	main, func_index := divide_by_function(data)
+
+	for key, _ := range func_index {
+		if key == "main" {
+			jsonDate["main"] = main
+		} else {
+			func_name := key
+			func_tokens := generate_func_tokens(func_name, func_index, data)
+			jsonDate[func_name] = func_tokens
+		}
+	}
 }
 
 func main() {
@@ -178,12 +208,6 @@ func main() {
 
 	data, status := rtokens()
 	if status {
-		fmt.Println(len(data))
-		func_num := get_func_num(data)
-		fmt.Println(func_num)
-
-		print_tokens(data)
+		generate_syntax_tree(data)
 	}
-
-	generate_syntax_tree(data)
 }

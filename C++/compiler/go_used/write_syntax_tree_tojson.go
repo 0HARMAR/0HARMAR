@@ -12,24 +12,7 @@ type Node struct {
 	Children []*Node `json:"children"`
 }
 
-func write_to_json(head_data []string, children [][]string) error {
-	// 创建根节点切片
-	roots := make([]Node, len(head_data))
-
-	// 构建每个根节点及其子节点
-	for i, head := range head_data {
-		roots[i] = Node{
-			Data:     head,
-			Children: make([]*Node, len(children[i])),
-		}
-		for j, child := range children[i] {
-			roots[i].Children[j] = &Node{
-				Data:     child,
-				Children: nil, // 如果没有子节点，设置为 nil
-			}
-		}
-	}
-
+func write_to_json(functions map[string][]Node) error {
 	// 打开或创建 JSON 文件
 	file, err := os.Create("syntax_tree.json")
 	if err != nil {
@@ -39,6 +22,6 @@ func write_to_json(head_data []string, children [][]string) error {
 
 	// 将结构体编码为 JSON 并写入文件
 	encoder := json.NewEncoder(file)
-	encoder.SetIndent("", "  ")  // 设置缩进格式
-	return encoder.Encode(roots) // 将多个根节点编码为 JSON
+	encoder.SetIndent("", "  ")      // 设置缩进格式
+	return encoder.Encode(functions) // 将多个根节点编码为 JSON
 }

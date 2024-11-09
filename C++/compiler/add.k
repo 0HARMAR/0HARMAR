@@ -18,4 +18,8 @@ func calculate (int a,int b) int
     int sum = a + b + a
     return sum
 
+func add (int op1,int op2) int
+    int sum = op1 + op2
+    return sum
+
 int hmy = 111
