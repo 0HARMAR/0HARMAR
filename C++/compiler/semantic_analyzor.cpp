@@ -3,6 +3,7 @@
 #include <string>
 #include "json-develop\single_include\nlohmann\json.hpp"
 #include <vector>
+#include <optional>
 
 using namespace std;
 using json = nlohmann::json;
@@ -11,17 +12,29 @@ using json = nlohmann::json;
 #define PRINT(x) std::cout << x << std::endl;
 
 template <typename StreamType>
-string var_name = ""; // var name table
+StreamType
+open(string filename){
+    StreamType file(filename)
+    if(!file.isopen()){
+        cerr << "connot open file tokens.json" << endl;
+        return nullptr;
+    }
+    else{
+        return file;
+    }
+}
 
-// 定义一个结构体来表示变量
-struct Variable {
-    std::string name;  // 变量名称
-    std::string type;  // 变量类型
-    std::string scope; // 作用域
-    int value;  // 值
+namespace var {
+    // 定义一个结构体来表示变量
+    struct Variable_ {
+        std::string name;  // 变量名称
+        std::string type;  // 变量类型
+        std::string scope; // 作用域
+        int value;  // 值
 };
+}
 
-json create_var_table_json(map<string,vector<Variable>> func_name_with_var_table){
+json create_var_table_json(std::map<string,std::vector<var::Variable_>> func_name_with_var_table){
     json var_table_json;
     for (const auto& fnwvt : func_name_with_var_table){
         string func_name = fnwvt.first;
@@ -54,24 +67,12 @@ map<string,vector<Variable>> generate_var_table(json json_obj){
                 var.name = line[1];
                 var.scope = "global";
                 var.value = stoi(line[3]);
-                var_name += var.name;
                 var_table.push_back(var);
         }
     }
     // now we get the vector<Variable> var_table
     func_name_with_var_table[func_name] = var_table;
 }
-}
-
-StreamType open(string filename){
-    StreamType file(filename);
-    if(!infile.is_open()){
-        cerr << "connot open file tokens.json" << endl;
-        return 1;
-    }
-    else{
-        return file;
-    }
 }
 // print file stream
 void pfstream(ifstream infile){
@@ -105,7 +106,7 @@ void pVarTable(vector<Variable> var_table){
     }
 }
 int main(){
-    ifstream infile = open<ifstream>("go_used/tokens_func.json")
+    ifstream infile = open<ifstream>("go_used/tokens_func.json");
     json json_obj;
     infile >> json_obj;
 
