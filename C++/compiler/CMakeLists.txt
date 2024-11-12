@@ -1,0 +1,1 @@
+add_executable(semantic_analyzor.exe semantic_analyzor.cpp)

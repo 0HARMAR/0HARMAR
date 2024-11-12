@@ -12,10 +12,10 @@ using json = nlohmann::json;
 #define PRINT(x) std::cout << x << std::endl;
 
 template <typename StreamType>
-StreamType
+StreamType*
 open(string filename){
-    StreamType file(filename)
-    if(!file.isopen()){
+    StreamType *file = new StreamType(filename);
+    if(!file->is_open()){
         cerr << "connot open file tokens.json" << endl;
         return nullptr;
     }
@@ -23,18 +23,15 @@ open(string filename){
         return file;
     }
 }
-
-namespace var {
     // 定义一个结构体来表示变量
-    struct Variable_ {
+    struct Variable {
         std::string name;  // 变量名称
         std::string type;  // 变量类型
         std::string scope; // 作用域
         int value;  // 值
 };
-}
 
-json create_var_table_json(std::map<string,std::vector<var::Variable_>> func_name_with_var_table){
+json create_var_table_json(std::map<string,std::vector<Variable>> func_name_with_var_table){
     json var_table_json;
     for (const auto& fnwvt : func_name_with_var_table){
         string func_name = fnwvt.first;
@@ -73,6 +70,7 @@ map<string,vector<Variable>> generate_var_table(json json_obj){
     // now we get the vector<Variable> var_table
     func_name_with_var_table[func_name] = var_table;
 }
+    return func_name_with_var_table;
 }
 // print file stream
 void pfstream(ifstream infile){
@@ -106,16 +104,33 @@ void pVarTable(vector<Variable> var_table){
     }
 }
 int main(){
-    ifstream infile = open<ifstream>("go_used/tokens_func.json");
+    cout << "Hello World!" << endl;
+
+    ifstream *infile = nullptr;
+    try {
+        cout << "Please enter the file name: ";
+        ifstream *infile = open<ifstream>("go_used/tokens_func.json");
+        if (infile == nullptr) {
+            throw runtime_error("cannot open file");
+        }
+    }
+    catch (const std::exception &e) {
+        cerr << e.what() << endl;
+    }
+    cout << "open file tokens_func.json" << endl;
     json json_obj;
-    infile >> json_obj;
+    *infile >> json_obj;
 
     json var_table_json = create_var_table_json(generate_var_table(json_obj));
-    ofstream ofile = open<ofstream>("var_table.json");
+    ofstream *ofile = open<ofstream>("var_table.json");
 
-    ofile << var_table_json.dump(4);
+    if (ofile != nullptr) {
+        *ofile << var_table_json.dump(4);
 
-    ofile.close();
-
+        ofile->close();
+    }
+    else {
+        cout << "open file error." << endl;
+    }
     return 0;
 }
