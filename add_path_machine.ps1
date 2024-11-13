@@ -1,0 +1,3 @@
+$first_arg = $args[0]
+
+Write-Host "第一个参数是 $first_arg"
