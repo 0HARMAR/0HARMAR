@@ -1,3 +1,4 @@
+# 添加路径到path系统变量
 $first_arg = $args[0]
 
 Write-Host "第一个参数是 $first_arg"
