@@ -1,10 +1,16 @@
 {
-    "var": [
+    "main": [
         {
             "name": "a",
             "scope": "global",
             "type": "int",
-            "value": 11
+            "value": 1
+        },
+        {
+            "name": "b",
+            "scope": "global",
+            "type": "int",
+            "value": 2
         },
         {
             "name": "c",
@@ -13,10 +19,22 @@
             "value": 10
         },
         {
-            "name": "b",
+            "name": "d",
             "scope": "global",
             "type": "int",
-            "value": 30
+            "value": 20
+        },
+        {
+            "name": "ret",
+            "scope": "global",
+            "type": "int",
+            "value": 20
+        },
+        {
+            "name": "hmy",
+            "scope": "global",
+            "type": "int",
+            "value": 111
         }
     ]
 }

@@ -1,7 +1,7 @@
 #include<iostream>
 #include <fstream>
 #include <string>
-#include "json-develop\single_include\nlohmann\json.hpp"
+#include "json-develop/single_include/nlohmann/json.hpp"
 #include <vector>
 #include <optional>
 
@@ -10,7 +10,7 @@ using json = nlohmann::json;
 
 #define PRINT_INFO(desc, x) std::cout << desc << ": " << x << std::endl;
 #define PRINT(x) std::cout << x << std::endl;
-
+bool is_interger_string(const string);
 template <typename StreamType>
 StreamType*
 open(string filename){
@@ -36,6 +36,7 @@ json create_var_table_json(std::map<string,std::vector<Variable>> func_name_with
     for (const auto& fnwvt : func_name_with_var_table){
         string func_name = fnwvt.first;
         vector<Variable> var_table = fnwvt.second;
+        cout << "写入json:" << func_name << endl;
         for(const auto& var : var_table){
         var_table_json[func_name].push_back({
             {"name",var.name},
@@ -63,7 +64,9 @@ map<string,vector<Variable>> generate_var_table(json json_obj){
                 var.type = "int";
                 var.name = line[1];
                 var.scope = "global";
-                var.value = stoi(line[3]);
+                if (is_interger_string(line[3])){
+                    var.value = stoi(line[3]);
+                }
                 var_table.push_back(var);
         }
     }
@@ -71,6 +74,17 @@ map<string,vector<Variable>> generate_var_table(json json_obj){
     func_name_with_var_table[func_name] = var_table;
 }
     return func_name_with_var_table;
+}
+
+// judge is a number string
+bool is_interger_string(const string str){
+    try{
+        int num = stoi(str);
+        return true;
+    }
+    catch(...){
+        return false;
+    }
 }
 // print file stream
 void pfstream(ifstream infile){
@@ -107,20 +121,17 @@ int main(){
     cout << "Hello World!" << endl;
 
     ifstream *infile = nullptr;
-    try {
-        cout << "Please enter the file name: ";
-        ifstream *infile = open<ifstream>("go_used/tokens_func.json");
-        if (infile == nullptr) {
-            throw runtime_error("cannot open file");
-        }
-    }
-    catch (const std::exception &e) {
-        cerr << e.what() << endl;
+    cout << "Please enter the file name: ";
+    infile = open<ifstream>("go_used/tokens_func.json");
+    if (infile == nullptr) {
+        throw runtime_error("cannot open file");
     }
     cout << "open file tokens_func.json" << endl;
     json json_obj;
     *infile >> json_obj;
-
+    if (infile->good()) {
+        cout << "read good" << endl;
+    }
     json var_table_json = create_var_table_json(generate_var_table(json_obj));
     ofstream *ofile = open<ofstream>("var_table.json");
 
