@@ -3,7 +3,6 @@
 #include <string>
 #include "json-develop/single_include/nlohmann/json.hpp"
 #include <vector>
-#include <optional>
 
 using namespace std;
 using json = nlohmann::json;
@@ -118,8 +117,6 @@ void pVarTable(vector<Variable> var_table){
     }
 }
 int main(){
-    cout << "Hello World!" << endl;
-
     ifstream *infile = nullptr;
     cout << "Please enter the file name: ";
     infile = open<ifstream>("go_used/tokens_func.json");
