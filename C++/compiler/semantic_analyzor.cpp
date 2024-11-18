@@ -48,6 +48,7 @@ json create_var_table_json(std::map<string,std::vector<Variable>> func_name_with
     return var_table_json;
 }
 
+
 map<string,vector<Variable>> generate_var_table(json json_obj){
     map<string,vector<Variable>> func_name_with_var_table;
     // traverse per function
@@ -59,7 +60,16 @@ map<string,vector<Variable>> generate_var_table(json json_obj){
         for(int i=0;i < func_tokens.size();i++){
             vector <string> line = func_tokens[i];
             Variable var;
-            if (line[0] == "int"){
+            if (line[0] == "\t"){
+                var.type = "int";
+                var.name = line[2];
+                var.scope = func_name + "_local";
+                if (is_interger_string(line[4])){
+                    var.value = stoi(line[4]);
+                }
+                var_table.push_back(var);
+            }
+            else if (line[0] == "int"){
                 var.type = "int";
                 var.name = line[1];
                 var.scope = "global";

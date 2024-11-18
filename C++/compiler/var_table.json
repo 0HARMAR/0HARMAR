@@ -1,4 +1,32 @@
 {
+    "add": [
+        {
+            "name": "sum",
+            "scope": "add_local",
+            "type": "int",
+            "value": 0
+        },
+        {
+            "name": "sum",
+            "scope": "add_local",
+            "type": "int",
+            "value": 0
+        }
+    ],
+    "calculate": [
+        {
+            "name": "sum",
+            "scope": "calculate_local",
+            "type": "int",
+            "value": 0
+        },
+        {
+            "name": "sum",
+            "scope": "calculate_local",
+            "type": "int",
+            "value": 0
+        }
+    ],
     "main": [
         {
             "name": "a",
