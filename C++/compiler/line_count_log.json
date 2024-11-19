@@ -1,10 +1,11 @@
 {
+    "./hello.cpp": 6,
     "./kentc.c": 68,
     "./lexer.py": 25,
     "./object_code_generate.py": 100,
-    "./semantic_analyzor.cpp": 147,
+    "./semantic_analyzor.cpp": 164,
     "./go_used\\parser.go": 229,
     "./go_used\\readtokens.go": 39,
     "./go_used\\write_syntax_tree_tojson.go": 27,
-    "last_updated": "2024-11-16 18:43:01"
+    "last_updated": "2024-11-18 21:49:08"
 }

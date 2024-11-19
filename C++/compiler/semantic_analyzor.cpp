@@ -48,10 +48,41 @@ json create_var_table_json(std::map<string,std::vector<Variable>> func_name_with
     return var_table_json;
 }
 
+int get_func_name_index(vector <string> line){
+    for (auto it = line.begin(); it != line.end(); ++it) {
+        size_t index = std::distance(line.begin(), it);// 获取迭代的Index
+        if (*it == "int"){
+            return index+1;
+        }
+    }
 
+    return -1;
+}
+// judge a line is a var decalre
+// and process the var declare
+// line,such as
+// 'int a','int a = 5'
+// 'int a = b + c'
+// return is/not a var decalre
+// and func name ,init value throgh reference
+bool process_var_declare(vector<string> line,string &func_name,string &init_value){
+    for(auto it = line.begin();it !=line.end();++it){
+        size_t index = distance(line.begin(),it);
+        if (*it == "int"){
+            func_name = line[index+1];
+             for(auto it_ = next(it);it_ != line.end(); ++it_){
+                size_t index_ = distance(line.begin(),it_);
+                if (*it_ == "="){
+                    // line[index_+1] is init value,if exist
+                    if (is_interger_string(line[index_+1]))
+                }
+            }
+        }
+    }
+}
 map<string,vector<Variable>> generate_var_table(json json_obj){
     map<string,vector<Variable>> func_name_with_var_table;
-    // traverse per function
+    // traverse per function  
     for (auto &func : json_obj.items()){
          // now we get the func_name
         string func_name = func.key();
@@ -60,9 +91,12 @@ map<string,vector<Variable>> generate_var_table(json json_obj){
         for(int i=0;i < func_tokens.size();i++){
             vector <string> line = func_tokens[i];
             Variable var;
+            int func_name_index = get_func_name_index(line);
+            var.type = "int";
+            if (func_name_index!=-1){
+                    var.name = line[func_name_index];
+            }
             if (line[0] == "\t"){
-                var.type = "int";
-                var.name = line[2];
                 var.scope = func_name + "_local";
                 if (is_interger_string(line[4])){
                     var.value = stoi(line[4]);
@@ -70,8 +104,6 @@ map<string,vector<Variable>> generate_var_table(json json_obj){
                 var_table.push_back(var);
             }
             else if (line[0] == "int"){
-                var.type = "int";
-                var.name = line[1];
                 var.scope = "global";
                 if (is_interger_string(line[3])){
                     var.value = stoi(line[3]);
