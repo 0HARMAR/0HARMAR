@@ -74,7 +74,22 @@ bool process_var_declare(vector<string> line,string &func_name,string &init_valu
                 size_t index_ = distance(line.begin(),it_);
                 if (*it_ == "="){
                     // line[index_+1] is init value,if exist
+                    // if init value is const
                     if (is_interger_string(line[index_+1]))
+                    {
+                        init_value = line[index_+1];
+                    }
+                    // init value is operate of other vars
+                    else{
+                        // generate the init express
+                        string express = "";
+                        for (auto it__ = next(it_);it__!=line.end();++it__){
+                            size_t index__ = distance(line.begin(),it__);
+                            express += *it__;
+                        }
+
+                        init_value = express;
+                    }
                 }
             }
         }

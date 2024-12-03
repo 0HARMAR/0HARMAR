@@ -7,6 +7,6 @@ int xchg(volatile int *addr, int newval) {
 
 int locked = 0;
 void lock() { while (xchg(&locked, 1)) ; }
-void unlock() { xchg(&locked, 0); }
+void unlock() { xchg(&locked, 0);9 }
 
 
