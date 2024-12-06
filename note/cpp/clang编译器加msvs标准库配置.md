@@ -8,3 +8,5 @@ $env:LIBPATH = "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools
 rosoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\ATLMFC\lib\x86;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\lib\x86;C:\Program Fi
 les\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\lib\x86\store\references;C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.22621.0;C:\Program Files (x86)\Windows Kits\10\References\10.0.22621.0;C:\Windows\Microsoft.NET\Framework\v4.0.30319"
 ```
+
+**clang++会将INCLUDE环境变量加入到默认头文件搜索路径**

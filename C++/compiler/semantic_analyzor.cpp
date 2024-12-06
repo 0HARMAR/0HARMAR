@@ -65,11 +65,13 @@ int get_func_name_index(vector <string> line){
 // 'int a = b + c'
 // return is/not a var decalre
 // and func name ,init value throgh reference
-bool process_var_declare(vector<string> line,string &func_name,string &init_value){
+bool process_var_declare(vector<string> line,string &var_name,string &init_value){
+    bool is_declare = false;
     for(auto it = line.begin();it !=line.end();++it){
         size_t index = distance(line.begin(),it);
         if (*it == "int"){
-            func_name = line[index+1];
+            is_declare = true;
+            var_name = line[index+1];
              for(auto it_ = next(it);it_ != line.end(); ++it_){
                 size_t index_ = distance(line.begin(),it_);
                 if (*it_ == "="){
@@ -94,6 +96,7 @@ bool process_var_declare(vector<string> line,string &func_name,string &init_valu
             }
         }
     }
+    return is_declare;
 }
 map<string,vector<Variable>> generate_var_table(json json_obj){
     map<string,vector<Variable>> func_name_with_var_table;
@@ -106,25 +109,13 @@ map<string,vector<Variable>> generate_var_table(json json_obj){
         for(int i=0;i < func_tokens.size();i++){
             vector <string> line = func_tokens[i];
             Variable var;
-            int func_name_index = get_func_name_index(line);
             var.type = "int";
-            if (func_name_index!=-1){
-                    var.name = line[func_name_index];
-            }
-            if (line[0] == "\t"){
+            string var_name = "";
+            string init_value = "";
+            if(process_var_declare(line,var_name,init_value));{
+                var.name = var_name;
+                var.value = stoi(init_value);
                 var.scope = func_name + "_local";
-                if (is_interger_string(line[4])){
-                    var.value = stoi(line[4]);
-                }
-                var_table.push_back(var);
-            }
-            else if (line[0] == "int"){
-                var.scope = "global";
-                if (is_interger_string(line[3])){
-                    var.value = stoi(line[3]);
-                }
-                var_table.push_back(var);
-        }
     }
     // now we get the vector<Variable> var_table
     func_name_with_var_table[func_name] = var_table;
