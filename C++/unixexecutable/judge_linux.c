@@ -14,7 +14,7 @@ int judge_system() {
     char buffer[256];
     if (fgets(buffer, sizeof(buffer), fp) != NULL) {
         if (strstr(buffer, "microsoft") != NULL) {
-            fclose(fp);
+            fclose(fp); 
             return 1;  // WSL detected
         }
     }
@@ -23,5 +23,5 @@ int judge_system() {
     return 0;  // Not WSL, assuming standard Linux
 }
 
-int _system = judge_system();
+int _system = judge_system();--
 
