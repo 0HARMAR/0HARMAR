@@ -43,7 +43,7 @@ func divide_by_function(data [][]string) ([][]string, map[string]map[int]int) {
 			main = append(main, line)
 		} else if line[0] == "func" {
 			current_func_name = line[1]
-			current_func_start_index = index + 1
+			current_func_start_index = index
 		} else if line[0] == "\t" {
 			// data[index + 1] is next line
 			if data[index+1][0] != "\t" {

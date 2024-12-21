@@ -3,6 +3,7 @@
 #include <string>
 #include "json-develop/single_include/nlohmann/json.hpp"
 #include <vector>
+#include <cstdint>
 
 using namespace std;
 using json = nlohmann::json;
@@ -67,6 +68,9 @@ int get_func_name_index(vector <string> line){
 // and func name ,init value throgh reference
 bool process_var_declare(vector<string> line,string &var_name,string &init_value){
     bool is_declare = false;
+    if (line[0] == "func"){
+        
+    }
     for(auto it = line.begin();it !=line.end();++it){
         size_t index = distance(line.begin(),it);
         if (*it == "int"){
@@ -112,10 +116,19 @@ map<string,vector<Variable>> generate_var_table(json json_obj){
             var.type = "int";
             string var_name = "";
             string init_value = "";
-            if(process_var_declare(line,var_name,init_value));{
+            if(process_var_declare(line,var_name,init_value))
+            {
                 var.name = var_name;
-                var.value = stoi(init_value);
+                try{
+                     var.value = stoi(init_value);
+                }
+                catch(...){
+                    // NO INIT VALUE
+                    var.value = INT32_MAX;
+                }
                 var.scope = func_name + "_local";
+                var_table.push_back(var);
+            }
     }
     // now we get the vector<Variable> var_table
     func_name_with_var_table[func_name] = var_table;

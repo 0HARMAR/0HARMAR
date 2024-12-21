@@ -1,6 +1,16 @@
 {
   "add": [
     [
+      "func",
+      "add",
+      "(",
+      "int",
+      "op1,int",
+      "op2",
+      ")",
+      "int"
+    ],
+    [
       "\t",
       "int",
       "sum",
@@ -16,6 +26,16 @@
     ]
   ],
   "calculate": [
+    [
+      "func",
+      "calculate",
+      "(",
+      "int",
+      "a,int",
+      "b",
+      ")",
+      "int"
+    ],
     [
       "\t",
       "int",

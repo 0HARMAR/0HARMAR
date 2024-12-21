@@ -17,6 +17,11 @@ with open(path) as src:
             token.insert(0,'\t')
             tokens.append(token)
             continue
+        elif line.startswith('func'):
+            token = line.rstrip('\n'.split())
+            for token_ in token:
+                if ',' in token_:
+                    
         tokens.append(line.rstrip('\n').split())
     with open(r"C:\Just-For-Fun\C++\compiler\go_used\tokens.json",'w') as tkjs:
         json.dump(tokens,tkjs,indent=4)

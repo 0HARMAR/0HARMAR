@@ -4,13 +4,7 @@
             "name": "sum",
             "scope": "add_local",
             "type": "int",
-            "value": 0
-        },
-        {
-            "name": "sum",
-            "scope": "add_local",
-            "type": "int",
-            "value": 0
+            "value": 2147483647
         }
     ],
     "calculate": [
@@ -18,49 +12,43 @@
             "name": "sum",
             "scope": "calculate_local",
             "type": "int",
-            "value": 0
-        },
-        {
-            "name": "sum",
-            "scope": "calculate_local",
-            "type": "int",
-            "value": 0
+            "value": 2147483647
         }
     ],
     "main": [
         {
             "name": "a",
-            "scope": "global",
+            "scope": "main_local",
             "type": "int",
             "value": 1
         },
         {
             "name": "b",
-            "scope": "global",
+            "scope": "main_local",
             "type": "int",
             "value": 2
         },
         {
             "name": "c",
-            "scope": "global",
+            "scope": "main_local",
             "type": "int",
             "value": 10
         },
         {
             "name": "d",
-            "scope": "global",
+            "scope": "main_local",
             "type": "int",
             "value": 20
         },
         {
             "name": "ret",
-            "scope": "global",
+            "scope": "main_local",
             "type": "int",
-            "value": 20
+            "value": 2147483647
         },
         {
             "name": "hmy",
-            "scope": "global",
+            "scope": "main_local",
             "type": "int",
             "value": 111
         }
