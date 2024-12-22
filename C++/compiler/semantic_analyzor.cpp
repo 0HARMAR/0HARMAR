@@ -69,7 +69,7 @@ int get_func_name_index(vector <string> line){
 bool process_var_declare(vector<string> line,string &var_name,string &init_value){
     bool is_declare = false;
     if (line[0] == "func"){
-        
+
     }
     for(auto it = line.begin();it !=line.end();++it){
         size_t index = distance(line.begin(),it);
@@ -102,9 +102,24 @@ bool process_var_declare(vector<string> line,string &var_name,string &init_value
     }
     return is_declare;
 }
+
+void push_formalParam_to_varTable(vector <string> &line,vector <Variable> &var_table){
+    int formalParamStart = 3;
+    for (auto it = line.begin()+formalParamStart;it != line.end();it++){
+        if (*it == "int" && it+1 != line.end())
+        {
+            Variable var;
+            var.type = "int";
+            var.scope = line[1]+ "_local";
+            var.value = INT32_MAX;
+            var.name = *(it+1);
+            var_table.push_back(var);
+        }
+    }
+}
 map<string,vector<Variable>> generate_var_table(json json_obj){
     map<string,vector<Variable>> func_name_with_var_table;
-    // traverse per function  
+    // traverse per function
     for (auto &func : json_obj.items()){
          // now we get the func_name
         string func_name = func.key();
@@ -112,6 +127,10 @@ map<string,vector<Variable>> generate_var_table(json json_obj){
         vector <Variable> var_table;
         for(int i=0;i < func_tokens.size();i++){
             vector <string> line = func_tokens[i];
+            if (line[0] == "func"){
+                push_formalParam_to_varTable(line,var_table);
+                continue;
+            }
             Variable var;
             var.type = "int";
             string var_name = "";

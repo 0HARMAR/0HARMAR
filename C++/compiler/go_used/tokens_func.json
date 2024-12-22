@@ -5,7 +5,8 @@
       "add",
       "(",
       "int",
-      "op1,int",
+      "op1",
+      "int",
       "op2",
       ")",
       "int"
@@ -31,7 +32,8 @@
       "calculate",
       "(",
       "int",
-      "a,int",
+      "a",
+      "int",
       "b",
       ")",
       "int"

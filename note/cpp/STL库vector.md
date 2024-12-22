@@ -39,3 +39,24 @@ void iterator_test(vector<int> numbers){
 结果是这样做没有问题
 ```
 end()返回的是“超过最后一个元素的位置”，auto it创建了一个numbers的迭代器，通过*it解引用迭代器访问每个元素
+
+
+### 从特定位置开始遍历
+```cpp
+#include <vector>
+#include <iostream>
+
+int main() {
+    std::vector<int> vec = {10, 20, 30, 40, 50};
+
+    // 指定下标位置
+    size_t startIndex = 2; // 从下标 2 开始遍历
+
+    // 使用 begin() + 偏移获取迭代器
+    for (auto it = vec.begin() + startIndex; it != vec.end(); ++it) {
+        std::cout << *it << " ";
+    }
+
+    return 0;
+}
+```

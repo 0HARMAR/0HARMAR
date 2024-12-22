@@ -1,6 +1,18 @@
 {
     "add": [
         {
+            "name": "op1",
+            "scope": "add_local",
+            "type": "int",
+            "value": 2147483647
+        },
+        {
+            "name": "op2",
+            "scope": "add_local",
+            "type": "int",
+            "value": 2147483647
+        },
+        {
             "name": "sum",
             "scope": "add_local",
             "type": "int",
@@ -8,6 +20,18 @@
         }
     ],
     "calculate": [
+        {
+            "name": "a",
+            "scope": "calculate_local",
+            "type": "int",
+            "value": 2147483647
+        },
+        {
+            "name": "b",
+            "scope": "calculate_local",
+            "type": "int",
+            "value": 2147483647
+        },
         {
             "name": "sum",
             "scope": "calculate_local",
