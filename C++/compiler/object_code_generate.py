@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict, Any
+from typing import List, Dict, Any,TextIO
 
 path_prefix = r'C:\Just-For-Fun\C++\compiler\\'
 registers_64bit = [
@@ -20,6 +20,20 @@ registers_64bit = [
     "r14",  # 64-bit General Purpose Register 14
     "r15"   # 64-bit General Purpose Register 15
 ]
+var_list = []
+
+def exit_code(asm : TextIO):
+    asm.write('\tmovq $60, %rax\n')
+    asm.write('\txor %rdi, %rdi\n')
+    asm.write('\tsyscall\n')
+    asm.write('\n')
+
+def write_var(asm : TextIO,var_table : TextIO):
+    var_table_data = json.load(var_table)
+    for var in var_table_data["var"]:
+        asm.write(f'{var["name"]}:      .quad {var["value"]}\n')
+        var_ = variable(var["name"],var["scope"],var["type"],var["value"])
+        var_list.append(var_)
 
 class variable():
     def __init__(self,name,scope,type,value):
@@ -38,16 +52,11 @@ with (
     set the var in asm
     """
     asm.write('.section .data\n')
-    var_table_data = json.load(var_table)
-    var_list = []
-    for var in var_table_data["var"]:
-        asm.write(f'{var["name"]}:      .quad {var["value"]}\n')
-        var_ = variable(var["name"],var["scope"],var["type"],var["value"])
-        var_list.append(var_)
-        
+
+    write_var(asm,var_table)
+
     asm.write('.section .text\n')
     asm.write('.global _start\n')
-        
     asm.write('_start:\n') 
     
     """
@@ -88,13 +97,4 @@ with (
         # update the var table
         var_list[dest_var_index].value = sum
     # process exit code
-
-    asm.write('\tmovq $60, %rax\n')
-    asm.write('\txor %rdi, %rdi\n')
-    asm.write('\tsyscall\n')
-    asm.write('\n')
-
-        
-    
-    
-    
+    exit_code()
