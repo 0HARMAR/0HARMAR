@@ -28,3 +28,7 @@
 ### 返回地址
 
 调用函数时，call 指令会将返回地址压入栈中（通过 ret 返回）。
+
+
+### 示例程序
+[att函数调用](file:\\\C:\Just-For-Fun\ASM\learn\func_call.asm)

@@ -2,6 +2,10 @@ import json
 from typing import List, Dict, Any,TextIO
 
 path_prefix = r'C:\Just-For-Fun\C++\compiler\\'
+
+# describe the reg and var binding relationship
+reg_binding_var : List[Dict[str,str]] = []
+
 registers_64bit = [
     "rax",  # Extended Accumulator
     "rbx",  # Extended Base
@@ -64,9 +68,6 @@ with (
     according to syntax tree
     calculate the exepress
     """
-    
-    # describe the reg and var binding relationship
-    reg_binding_var : List[Dict[str,str]] = []
     # mov var to registers
     for var, reg in zip(var_list, registers_64bit):
         reg_var = {}

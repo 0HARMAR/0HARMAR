@@ -13,7 +13,7 @@ public:
     void display() const {
         std::cout << real << " + " << imag << "i" << std::endl;
     }
-};
+}; 
 
 int main() {
     Complex c1(2, 3), c2(4, 5);
