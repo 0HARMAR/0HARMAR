@@ -24,6 +24,16 @@ registers_64bit = [
     "r14",  # 64-bit General Purpose Register 14
     "r15"   # 64-bit General Purpose Register 15
 ]
+
+callee_save_registers = [
+    "rbx",
+    "rbp",
+    "rsp",
+    "r12",
+    "r13",
+    "r14",
+    "r15" 
+]
 var_list = []
 
 def exit_code(asm : TextIO):
@@ -34,11 +44,17 @@ def exit_code(asm : TextIO):
 
 def write_var(asm : TextIO,var_table : TextIO):
     var_table_data = json.load(var_table)
-    for var in var_table_data["var"]:
+    for var in var_table_data["main"]:
         asm.write(f'{var["name"]}:      .quad {var["value"]}\n')
         var_ = variable(var["name"],var["scope"],var["type"],var["value"])
         var_list.append(var_)
 
+def write_function(asm : TextIO):
+    asm.write("push %rbp")
+    asm.write("mov %rsp , %rbp")
+
+def analysis_s
+    
 class variable():
     def __init__(self,name,scope,type,value):
         self.name = name
