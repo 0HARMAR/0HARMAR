@@ -8,8 +8,7 @@ int main() {
     printf("\033[32mThis is green text\033[0m\n");
     
     // 打印黄色文本
-    printf("\033[33mThis is yellow text\033[0m\n");
-    
+    printf("\033[33mThis is yellow text\033[0m\n"); 
     // 打印蓝色文本
     printf("\033[34mThis is blue text\033[0m\n");
     

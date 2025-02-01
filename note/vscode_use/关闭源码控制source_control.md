@@ -1,0 +1,1 @@
+在工作区的settings.json里添加"git.enabled": false

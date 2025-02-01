@@ -9,10 +9,18 @@
     .globl _start
 
 _start:
-    # 将整数转换为字符串（手动实现）
-    movq num, %rax             # 将 num 的值加载到 %rax 中
-    lea buffer(%rip), %rdi      # 加载缓冲区的地址到 %rdi
+    movq num , %rdi
+    call print_64
+    # 退出程序
+    movq $60, %rax             # 系统调用号 60 (sys_exit)
+    xor %rdi, %rdi             # 退出码 0
+    syscall                    # 调用 syscall 退出
 
+print_64:
+    pushq %rbp
+    movq %rsp , %rbp
+    # 将整数转换为字符串（手动实现）
+    movq %rdi, %rax             # 将第一个参数加载到 %rax 中
     # 手动将 64 位整数转换为字符串
     movq $0, %rcx              # %rcx 清零，用于保存字符串长度
 convert_loop:
@@ -26,14 +34,20 @@ convert_loop:
     testq %rax, %rax           # 检查是否已经除尽
     jnz convert_loop           # 如果 %rax 不是零，继续循环
 
-    # 打印转换后的整数字符串
+print_rst:
+    testq %rcx , %rcx 
+    jz return
+    dec %rcx
+    pushq %rcx
     movq $1, %rdi              # 文件描述符 1 (stdout)
-    lea buffer(%rip), %rsi     # 加载缓冲区的地址到 %rsi
-    movq %rcx, %rdx            # 将字符串长度保存到 %rdx
+    lea buffer(%rip), %rbx     # 加载缓冲区的地址到 %rsi
+    lea (%rbx,%rcx,1) , %rsi
+    movq $1, %rdx            # 将字符串长度保存到 %rdx
     movq $1, %rax              # 系统调用号 1 (sys_write)
     syscall                    # 调用 write
+    popq %rcx
+    jmp print_rst
 
-    # 退出程序
-    movq $60, %rax             # 系统调用号 60 (sys_exit)
-    xor %rdi, %rdi             # 退出码 0
-    syscall                    # 调用 syscall 退出
+return:
+    popq %rbp
+    ret

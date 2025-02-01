@@ -17,7 +17,7 @@ if [ ! -f "$asm_file" ]; then
 fi
 
 # 编译汇编文件并链接
-as -o "${output_file}.o" "$asm_file" && ld -o "$output_file" "${output_file}.o"
+as -g -o "${output_file}.o" "$asm_file" && ld -o "$output_file" "${output_file}.o"
 
 # 检查是否成功
 if [ $? -eq 0 ]; then
