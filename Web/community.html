@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单聊天室</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #chat-window {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ccc;
+        }
+        #message-input {
+            display: flex;
+            padding: 10px;
+        }
+        #message-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #message-input button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .message .username {
+            font-weight: bold;
+            color: #333;
+        }
+        .message .text {
+            margin-left: 10px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-window">
+        <!-- 聊天消息将显示在这里 -->
+    </div>
+    <div id="message-input">
+        <input type="text" id="message" placeholder="输入消息...">
+        <button onclick="sendMessage()">发送</button>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const chatWindow = document.getElementById('chat-window');
+        const messageInput = document.getElementById('message');
+
+        // 发送消息函数
+        function sendMessage() {
+            const messageText = messageInput.value.trim();
+            if (messageText !== '') {
+                // 创建消息元素
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+
+                const usernameElement = document.createElement('span');
+                usernameElement.classList.add('username');
+                usernameElement.textContent = '用户:';
+
+                const textElement = document.createElement('span');
+                textElement.classList.add('text');
+                textElement.textContent = messageText;
+
+                messageElement.appendChild(usernameElement);
+                messageElement.appendChild(textElement);
+
+                // 将消息添加到聊天窗口
+                chatWindow.appendChild(messageElement);
+
+                // 清空输入框
+                messageInput.value = '';
+
+                // 滚动到最新消息
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+        }
+
+        // 按下回车键发送消息
+        messageInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

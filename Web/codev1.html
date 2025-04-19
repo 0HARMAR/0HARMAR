@@ -1,0 +1,91 @@
+<div class="code-ide">
+    <div class="file-tabs">
+        <button class="tab active" data-file="app.js">app.js</button>
+        <button class="tab" data-file="styles.css">styles.css</button>
+    </div>
+    
+    <div class="code-container">
+        <pre class="active" id="app.js"><code>
+function init() {
+    console.log('Hello from app.js');
+    // 这里可以添加更多代码演示
+}</code></pre>
+        
+        <pre id="styles.css"><code>
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}</code></pre>
+    </div>
+</div>
+
+<style>
+.code-ide {
+    background: #1e1e1e;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+
+.file-tabs {
+    background: #252526;
+    padding: 10px;
+    display: flex;
+    gap: 5px;
+    border-bottom: 2px solid #333;
+}
+
+.tab {
+    background: #2d2d2d;
+    border: none;
+    color: #9cdcfe;
+    padding: 8px 16px;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tab.active {
+    background: #1e1e1e;
+    color: #fff;
+}
+
+.code-container pre {
+    display: none;
+    margin: 0;
+    padding: 20px;
+}
+
+.code-container pre.active {
+    display: block;
+}
+
+/* 添加行号 */
+pre {
+    counter-reset: line;
+}
+
+code:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    width: 2em;
+    padding-right: 1em;
+    color: #666;
+    border-right: 1px solid #444;
+    margin-right: 1em;
+    user-select: none;
+}
+</style>
+
+<script>
+// 标签切换功能
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab, pre').forEach(el => el.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.file).classList.add('active');
+    });
+});
+</script>

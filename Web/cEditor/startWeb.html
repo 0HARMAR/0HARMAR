@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C在线编译平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* style.css */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background-gradient);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--primary-color);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .upload-section {
+            background: rgba(255,255,255,0.9);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .file-upload {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            transition: border-color 0.3s ease;
+        }
+
+        .file-upload.dragover {
+            border-color: var(--secondary-color);
+        }
+
+        .compile-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        select, button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button.primary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        button.primary:hover {
+            opacity: 0.9;
+        }
+
+        .download-link {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #e8f4ff;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+
+        .server-status {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <!-- 头部 -->
+            <header class="header">
+                <h1>C语言在线编译平台</h1>
+                <p>安全、快速的云端编译解决方案</p>
+            </header>
+
+            <!-- 功能卡片 -->
+            <div class="card-container">
+                <div class="feature-card" @click="showUpload = true">
+                    <i class="fas fa-file-upload card-icon"></i>
+                    <h3>上传编译</h3>
+                    <p>上传您的C文件进行云端编译</p>
+                </div>
+
+                <div class="feature-card" @click="gotoOnlineCompiler">
+                    <i class="fas fa-code card-icon"></i>
+                    <h3>在线编辑</h3>
+                    <p>使用我们的在线编辑器实时编译</p>
+                </div>
+            </div>
+
+            <!-- 上传编译面板 -->
+            <div class="upload-section" v-if="showUpload">
+                <h2>文件编译设置</h2>
+                
+                <!-- 文件上传区域 -->
+                <div class="file-upload" 
+                     @dragover.prevent="handleDragOver"
+                     @dragleave="handleDragLeave"
+                     @drop.prevent="handleFileDrop"
+                     :class="{ 'dragover': isDragging }">
+                    <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                    <p>拖放文件到这里或 <button class="primary" @click="triggerFileInput">选择文件</button></p>
+                    <input type="file" ref="fileInput" hidden @change="handleFileSelect">
+                    <p v-if="selectedFile">已选择文件：{{ selectedFile.name }}</p>
+                </div>
+
+                <!-- 编译选项 -->
+                <div class="compile-options">
+                    <select v-model="compiler">
+                        <option value="gcc">GCC编译器</option>
+                        <option value="clang">Clang编译器</option>
+                    </select>
+
+                    <select v-model="optimization">
+                        <option value="O0">无优化 (O0)</option>
+                        <option value="O1">基础优化 (O1)</option>
+                        <option value="O2">高级优化 (O2)</option>
+                        <option value="O3">最大优化 (O3)</option>
+                    </select>
+                </div>
+
+                <!-- 操作按钮 -->
+                <button class="primary" @click="startCompile" :disabled="!selectedFile || compiling">
+                    {{ compiling ? '编译中...' : '开始编译' }}
+                </button>
+
+                <!-- 下载链接 -->
+                <div class="download-link" v-if="downloadUrl">
+                    <i class="fas fa-download"></i>
+                    <a :href="downloadUrl" download>点击下载可执行文件</a>
+                </div>
+            </div>
+
+            <!-- 服务器状态 -->
+            <div class="server-status">
+                <i class="fas fa-server"></i>
+                服务器状态：{{ serverStatus }}
+            </div>
+        </div>
+        <div v-if="helloData">
+            <h3>接口返回数据：</h3>
+            <pre>{{ helloData }}</pre>
+        </div>
+        <div v-else>
+            数据加载中...
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const { createApp, ref, onMounted } = Vue;
+    
+        createApp({
+            setup() {
+                // 状态声明 (保持原有)
+                const showUpload = ref(false);
+                const isDragging = ref(false);
+                const selectedFile = ref(null);
+                const compiler = ref('gcc');
+                const optimization = ref('O2');
+                const compiling = ref(false);
+                const downloadUrl = ref(null);
+                const serverStatus = ref('正常');
+                const fileInput = ref(null);
+                const helloData = ref(null);
+    
+                // 确保所有方法都在 return 之前定义
+                // 1. 文件选择触发方法
+                const triggerFileInput = () => {
+                    fileInput.value.click();
+                };
+    
+                // 2. 文件选择处理器
+                const handleFileSelect = (e) => {
+                    // 获取选中的文件对象
+                    const file = e.target.files[0];
+
+                    // 创建 FormData 对象用于封装文件数据
+                    const formData = new FormData();
+                    formData.append("file", file); // "file" 是后端接收文件的参数名
+
+                    // 使用 axios 发送 POST 请求到后端
+                    this.axios.post("http://localhost:8080/upload", formData, {
+                      headers: {
+                        "Content-Type": "multipart/form-data"
+                      }
+                    })
+                    .then(response => {
+                      console.log("文件上传成功:", response.data);
+                    })
+                    .catch(error => {
+                      console.error("文件上传失败:", error);
+                    });
+                };
+    
+                // 3. 拖拽事件处理器
+                const handleDragOver = (e) => {
+                    e.preventDefault();
+                    isDragging.value = true;
+                };
+    
+                const handleDragLeave = (e) => {
+                    e.preventDefault();
+                    isDragging.value = false;
+                };
+    
+                const handleFileDrop = (e) => {
+                    e.preventDefault();
+                    isDragging.value = false;
+                    selectedFile.value = e.dataTransfer.files[0];
+                };
+    
+                // 4. 编译方法
+                const startCompile = async () => {
+                    compiling.value = true;
+                    setTimeout(() => {
+                        compiling.value = false;
+                        downloadUrl.value = '/download/sample.exe';
+                    }, 2000);
+                };
+    
+                // 5. 页面跳转方法
+                const gotoOnlineCompiler = () => {
+                    window.location.href = 'mainWeb.html';
+                };
+    
+                // 生命周期钩子
+                onMounted(() => {
+                    axios.get('http://localhost:8080/hello?name=harmar')
+                        .then(response => {
+                            console.log('接口数据:', response.data);
+                            helloData.value = response.data;
+                        })
+                        .catch(error => {
+                            console.error('请求错误:', error);
+                            helloData.value = '数据加载失败';
+                        });
+                });
+    
+                // 确保导出所有模板需要的方法和状态
+                return {
+                    // 状态
+                    showUpload,
+                    isDragging,
+                    selectedFile,
+                    compiler,
+                    optimization,
+                    compiling,
+                    downloadUrl,
+                    serverStatus,
+                    fileInput,
+                    helloData,
+    
+                    // 方法
+                    triggerFileInput,
+                    handleFileSelect,
+                    handleDragOver,
+                    handleDragLeave,
+                    handleFileDrop,
+                    startCompile,
+                    gotoOnlineCompiler
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

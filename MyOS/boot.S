@@ -25,7 +25,6 @@ main:
     movw %ax, %es       # ES = 0
     movw %ax, %ss       # SS = 0
     movw $0x7C00, %sp   # 栈指针指向引导扇区起始地址
-
     # 打印字符串
     movw $msg, %si      # SI 指向字符串
     call print_string

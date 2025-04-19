@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <link rel="icon" type="image/png" href="hongxia2.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmar | 开发者小栈</title>
+    <style>
+        /* 基础重置与变量定义 */
+        :root {
+            --primary-color: #8B4513;  /* 棕色系 */
+            --secondary-color: #A0522D;
+            --background-light: #FFF8F0;
+            --text-dark: #2D2D2D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'KaiTi', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: var(--background-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* 动态导航栏 */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--primary-color);
+            margin: 0 1.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* 个性化头部 */
+        header {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+            margin-bottom: 3rem;
+        }
+
+        .avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 1.5rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* 现代项目展示 */
+        .projects {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-tag {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        .project-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .project-link:hover {
+            background: var(--secondary-color);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            header {
+                padding: 4rem 1rem;
+            }
+            
+            .projects {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 动态页脚 */
+        footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 2rem;
+            margin-top: 5rem;
+            text-align: center;
+        }
+
+        .social-links {
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            margin: 0 1rem;
+            font-size: 1.5rem;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .social-links a:hover {
+            opacity: 1;
+        }
+        img {
+            background-color: #f0f0f0; /* 与页面背景颜色一致 */
+            padding: 5px; /* 可选：增加内边距避免边缘突兀 */
+            border-radius: 8px; /* 可选：圆角效果 */
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <h2 style="color: var(--primary-color);">Harmar</h2>
+            <div class="nav-links">
+                <a href="#about">关于</a>
+                <a href="#projects">项目</a>
+                <a href="community.html">建议</a>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <img src="虹夏.jpg" alt="开发者头像" class="avatar">
+        <h1>创新与代码的交响曲</h1>
+        <p>全栈开发者 | 技术探索者 | 创意实践者</p>
+    </header>
+
+    <main>
+        <section class="projects">
+            <article class="project-card">
+                <span class="project-tag">编程语言</span>
+                <img src="项目1图片.jpg" alt="Kent项目" class="project-image">
+                <div class="project-content">
+                    <h2>Kent编程语言</h2>
+                    <p>自主设计的现代化编程语言，支持函数式与面向对象范式。</p>
+                    <a href="code.html" class="project-link">探索项目 →</a>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <span class="project-tag">系统模拟</span>
+                <img src="项目2图片.jpg" alt="硬件模拟器" class="project-image">
+                <div class="project-content">
+                    <h2>硬件模拟器</h2>
+                    <p>Python实现的计算机硬件架构模拟系统，支持指令集模拟。</p>
+                    <a href="#" class="project-link">查看源码 →</a>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <span class="project-tag">系统开发</span>
+                <img src="项目3图片.jpg" alt="UNIX项目" class="project-image">
+                <div class="project-content">
+                    <h2>UNIX工具集</h2>
+                    <p>基于POSIX标准开发的核心系统工具集合。</p>
+                    <a href="#" class="project-link">了解详情 →</a>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Harmar的技术小栈</p>
+        <div class="social-links">
+            <a href="https://github.com/0HARMAR/0HARMAR" target="_blank">GitHub</a>
+            <a href="https://beian.miit.gov.cn" target="_blank" rel="noopener noreferrer">
+                皖ICP备2025075130号
+            </a>
+            <a href="mailto:ttai33638@gmail.com">Email</a>
+        </div>
+    </footer>
+</body>
+</html>

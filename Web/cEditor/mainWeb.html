@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线C编译器</title>
+    <link rel="stylesheet" href="mainWebStyle.css">
+</head>
+<body>
+    <div id="mainWeb">
+        <div class="container">
+            <!-- 顶部工具栏 -->
+            <div class="toolbar">
+                <select v-model="selectedCompiler" class="toolbar-item">
+                    <option value="gcc">GCC</option>
+                    <option value="clang">Clang</option>
+                </select>
+                <button @click="compile" class="toolbar-item run-btn">编译运行</button>
+                <button @click="startDebugging" class="toolbar-item debug-btn">启动调试</button>
+                <div class="debug-controls" v-if="isDebugging">
+                    <button @click="stepOver">步过</button>
+                    <button @click="stepInto">步入</button>
+                    <button @click="continueExecution">继续</button>
+                </div>
+            </div>
+
+            <!-- 主内容区域 -->
+            <div class="main-content">
+                <!-- 代码编辑器 -->
+                <div class="editor-container">
+                    <div ref="editor" class="code-editor"></div>
+                </div>
+
+                <!-- 右侧面板 -->
+                <div class="right-panel">
+                    <!-- 输出选项卡 -->
+                    <div class="tab-container">
+                        <button 
+                            v-for="tab in tabs" 
+                            :key="tab.id" 
+                            @click="activeTab = tab.id"
+                            :class="{ 'active-tab': activeTab === tab.id }"
+                        >
+                            {{ tab.label }}
+                        </button>
+                    </div>
+
+                    <!-- 输出内容 -->
+                    <div class="output-container">
+                        <div v-if="activeTab === 'output'" class="output-content">
+                            <pre>{{ compileOutput }}</pre>
+                        </div>
+                        
+                        <div v-if="activeTab === 'asm'" class="disassembly-content">
+                            <pre>{{ disassembly }}</pre>
+                        </div>
+                        
+                        <div v-if="activeTab === 'debug'" class="debug-info">
+                            <div class="register-view">
+                                <h4>寄存器状态</h4>
+                                <pre>{{ registerState }}</pre>
+                            </div>
+                            <div class="memory-view">
+                                <h4>内存状态</h4>
+                                <pre>{{ memoryState }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 依赖库 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs/loader.min.js"></script>
+    <script src="mainWebjs.js"></script>
+</body>
+</html>

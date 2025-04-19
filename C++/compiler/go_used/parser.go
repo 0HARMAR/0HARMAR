@@ -4,226 +4,189 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"sync"
 )
 
-func get_func_num(data [][]string) int {
-	func_num := 1
-	data, status := rtokens()
-	if status {
-		for _, line := range data {
-			if line[0] == "func" {
-				func_num += 1
-			}
+// Node 表示语法树节点
+type Node struct {
+	Data     string  `json:"data"`
+	Children []*Node `json:"children,omitempty"`
+}
+
+// FunctionAST 函数抽象语法树结构
+type FunctionAST struct {
+	Name string
+	Tree []Node
+}
+
+// 常量定义
+const (
+	FuncToken = "func"
+	TabIndent = "\t"
+)
+
+// CountFunctionDeclarations 统计函数声明数量（优化内存分配[1,4](@ref)）
+func CountFunctionDeclarations(data [][]string) int {
+	count := 1 // 包含main函数
+	for _, line := range data {
+		if len(line) > 0 && line[0] == FuncToken {
+			count++
 		}
 	}
-	return func_num
+	return count
 }
 
-func print_tokens(data [][]string) {
-	for index, value := range data {
-		fmt.Printf("第%d行 :", index)
-		fmt.Println(value)
+// SplitByFunctionScope 按函数作用域分割代码（预分配内存[4](@ref)）
+func SplitByFunctionScope(data [][]string) (mainTokens [][]string, funcIndex map[string][2]int, err error) {
+	funcIndex = make(map[string][2]int)
+	currentFunc := "main"
+	startIndex := 0
+
+	for i, line := range data {
+		if len(line) == 0 {
+			continue
+		}
+
+		switch line[0] {
+		case FuncToken:
+			if len(line) < 2 {
+				return nil, nil, fmt.Errorf("函数定义错误 at line %d", i+1)
+			}
+			currentFunc = line[1]
+			startIndex = i
+		case TabIndent:
+			if i+1 < len(data) && data[i+1][0] != TabIndent {
+				funcIndex[currentFunc] = [2]int{startIndex, i}
+			}
+		default:
+			mainTokens = append(mainTokens, line)
+		}
 	}
+	return
 }
 
-// accept one file tokens
-// divide the tokens according to
-// functions ,ruturn slice of [][]string
-func divide_by_function(data [][]string) ([][]string, map[string]map[int]int) {
-	var func_index map[string]map[int]int
-	func_index = make(map[string]map[int]int)
-	func_index["main"] = map[int]int{
-		0: len(data),
-	}
-	var main [][]string
-	var current_func_name string = "main"
-	var current_func_start_index int = 0
-	for index, line := range data {
-		if line[0] != "func" && line[0] != "\t" {
-			main = append(main, line)
-		} else if line[0] == "func" {
-			current_func_name = line[1]
-			current_func_start_index = index
-		} else if line[0] == "\t" {
-			// data[index + 1] is next line
-			if data[index+1][0] != "\t" {
-				func_index[current_func_name] = map[int]int{
-					current_func_start_index: index,
+// ResolveExpressionTree 解析表达式树（优化循环逻辑[3,6](@ref)）
+func ResolveExpressionTree(tokens [][]string) []Node {
+	nodes := make([]Node, 0, len(tokens))
+	
+	for _, line := range tokens {
+		var destVar string
+		operands := make([]string, 0, 3)
+		
+		for i, token := range line {
+			switch token {
+			case "=":
+				if i > 0 {
+					destVar = line[i-1]
+				}
+			case "+":
+				if i > 0 {
+					operands = append(operands, line[i-1])
 				}
 			}
 		}
+		
+		if len(line) > 0 {
+			operands = append(operands, line[len(line)-1])
+		}
+
+		if destVar != "" {
+			node := Node{Data: destVar}
+			for _, op := range operands {
+				node.Children = append(node.Children, &Node{Data: op})
+			}
+			nodes = append(nodes, node)
+		}
 	}
-	fmt.Println(main)
-	return main, func_index
+	return nodes
 }
 
-// accept one function's tokens
-// and resolve the express in this
-// function ,rutun the []Node
-// per Node represents a express
-// []Node reprensents a func's express
-
-func resolve_express_func(tokens [][]string) []Node {
-	var expresses [][]string
-	for i := 0; i < len(tokens); i++ {
-		data_line := tokens[i]
-		fmt.Println("token 数:", len(data_line))
-		for j := 0; j < len(data_line); j++ {
-			if data_line[j] == "+" { // if line has '+',it is a express
-				expresses = append(expresses, data_line)
-				break
-			}
-		}
-	}
-	fmt.Println("总的表达式")
-	for i := 0; i < len(expresses); i++ { // print the express
-		fmt.Println(expresses[i])
-	}
-
-	var dest_var []string                       // slice of distination varible
-	operand := make([][]string, len(expresses)) // slice of dest_var operand
-	for index, express := range expresses {
-		operand[index] = make([]string, 0)
-		// found left value
-		for index_ := 0; index_ < len(express); index_++ {
-			if express[index_] == "=" {
-				dest_var = append(dest_var, express[index_-1])
-			}
-		}
-		count := 0
-		for j := 0; j < len(express); j++ { //count '+' num
-			if express[j] == "+" {
-				count += 1
-			}
-		}
-		fmt.Println(count)
-		for j := 0; j < len(express); j++ {
-			if express[j] == "+" {
-				op1 := express[j-1]
-				operand[index] = append(operand[index], op1)
-			}
-		}
-		operand[index] = append(operand[index], express[len(express)-1])
-		fmt.Println(operand)
-	}
-
-	// now we have dest_var and
-	// oprand , and transform to
-	// struct []Node
-
-	var Nodes []Node
-	for i := 0; i < len(dest_var); i++ {
-		var node Node // head node
-		node.Data = dest_var[i]
-		for j := 0; j < len(operand[i]); j++ {
-			// child node
-			node_ := Node{
-				Data:     operand[i][j],
-				Children: nil,
-			}
-			node.Children = append(node.Children, &node_)
-		}
-
-		Nodes = append(Nodes, node)
-	}
-	return Nodes
-}
-
-func generate_func_tokens(func_name string,
-	func_index map[string]map[int]int,
-	data [][]string) [][]string {
-	var start int
-	var end int
-	for key, value := range func_index[func_name] {
-		start = key
-		end = value
-	}
-
-	var func_tokens [][]string = [][]string{}
-	for i := range make([]struct{}, end-start+1) {
-		func_tokens = append(func_tokens, data[start+i])
-	}
-
-	return func_tokens
-}
-
-// accept all function's resolved syntax
-// tree, generate the final syntax tree
-func generate_syntax_tree(data [][]string) {
-	main, func_index := divide_by_function(data)
-	func_num := get_func_num(data)
-	var func_syntax_tree map[string][]Node = make(map[string][]Node)
-	fmt.Println(main)
-	for key, value := range func_index {
-		fmt.Println("函数名 : ", key)
-		for key_, value_ := range value {
-			fmt.Println("start : ", key_)
-			fmt.Println("end : ", value_)
-		}
-	}
-	fmt.Print(func_index["main"])
-
-	for range make([]struct{}, func_num) {
-		for key, value := range func_index {
-			if key == "main" {
-				func_syntax_tree["main"] = resolve_express_func(main)
-			} else {
-				func_name := key
-				func_tokens := generate_func_tokens(func_name, func_index, data)
-				func_syntax_tree[func_name] = resolve_express_func(func_tokens)
-			}
-			for key_, value_ := range value {
-				fmt.Println("start : ", key_)
-				fmt.Println("end : ", value_)
-			}
-		}
-	}
-
-	// now we get the func_syntax_tree
-	// with type map[string](func_name)[]Node(
-	// func syntax tree)
-
-	write_to_json(func_syntax_tree)
-}
-
-func write_per_func_tokens_toJson(data [][]string) {
-	var jsonDate map[string][][]string = make(map[string][][]string)
-	main, func_index := divide_by_function(data)
-
-	for key, _ := range func_index {
-		if key == "main" {
-			jsonDate["main"] = main
-		} else {
-			func_name := key
-			func_tokens := generate_func_tokens(func_name, func_index, data)
-			jsonDate[func_name] = func_tokens
-		}
-	}
-
-	file, err := os.Create("tokens_func.json")
+// GenerateSyntaxTree 生成完整语法树（并发优化[2,8](@ref)）
+func GenerateSyntaxTree(data [][]string) (map[string][]Node, error) {
+	mainTokens, funcIndex, err := SplitByFunctionScope(data)
 	if err != nil {
-		fmt.Println("无法创建文件:", err)
-		return
+		return nil, err
+	}
+
+	result := make(map[string][]Node)
+	var wg sync.WaitGroup
+	resultChan := make(chan FunctionAST, 10)
+
+	// 处理main函数
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		resultChan <- FunctionAST{
+			Name: "main",
+			Tree: ResolveExpressionTree(mainTokens),
+		}
+	}()
+
+	// 并发处理其他函数
+	for name, bounds := range funcIndex {
+		if name == "main" {
+			continue
+		}
+
+		wg.Add(1)
+		go func(name string, start, end int) {
+			defer wg.Done()
+			funcTokens := make([][]string, 0, end-start+1)
+			for i := start; i <= end; i++ {
+				funcTokens = append(funcTokens, data[i])
+			}
+			resultChan <- FunctionAST{
+				Name: name,
+				Tree: ResolveExpressionTree(funcTokens),
+			}
+		}(name, bounds[0], bounds[1])
+	}
+
+	// 结果收集
+	go func() {
+		wg.Wait()
+		close(resultChan)
+	}()
+
+	for ast := range resultChan {
+		result[ast.Name] = ast.Tree
+	}
+
+	return result, nil
+}
+
+// WriteToJSON 写入JSON文件（错误处理优化[5,7](@ref)）
+func WriteToJSON(data interface{}, filename string) error {
+	file, err := os.Create(filename)
+	if err != nil {
+		return fmt.Errorf("文件创建失败: %w", err)
 	}
 	defer file.Close()
 
-	// 将结构体编码为 JSON 并写入文件
 	encoder := json.NewEncoder(file)
-	encoder.SetIndent("", "  ") // 设置缩进格式
-	if err := encoder.Encode(jsonDate); err != nil {
-		fmt.Println("JSON 编码失败:", err)
+	encoder.SetIndent("", "  ")
+	if err := encoder.Encode(data); err != nil {
+		return fmt.Errorf("JSON编码失败: %w", err)
 	}
+	return nil
 }
 
 func main() {
-	//first step
-	//read tokens,divide the code by function
+	data, err := ReadTokens()
+	if err != nil {
+		fmt.Printf("错误: %v\n", err)
+		return
+	}
 
-	//second step
-	//use paser for the each functions
+	// 生成语法树
+	ast, err := GenerateSyntaxTree(data)
+	if err != nil {
+		fmt.Printf("语法解析错误: %v\n", err)
+		return
+	}
 
-	data, status := rtokens()
-	if status {
-		write_per_func_tokens_toJson(data)
+	// 写入JSON
+	if err := WriteToJSON(ast, "ast_output.json"); err != nil {
+		fmt.Printf("写入失败: %v\n", err)
 	}
 }

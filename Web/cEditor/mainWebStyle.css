@@ -1,0 +1,86 @@
+#app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.toolbar {
+    padding: 10px;
+    background: #333;
+    color: white;
+    display: flex;
+    gap: 10px;
+}
+
+.toolbar-item {
+    padding: 5px 10px;
+}
+
+.run-btn {
+    background: #28a745;
+}
+
+.debug-btn {
+    background: #007bff;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+}
+
+.editor-container {
+    flex: 1;
+    height: calc(100vh - 60px);
+}
+
+.code-editor {
+    width: 100%;
+    height: 100%;
+}
+
+.right-panel {
+    width: 500px;
+    border-left: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+}
+
+.tab-container {
+    border-bottom: 1px solid #ccc;
+}
+
+.tab-container button {
+    padding: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.tab-container button.active-tab {
+    border-bottom: 2px solid #007bff;
+}
+
+.output-container {
+    flex: 1;
+    padding: 10px;
+    overflow: auto;
+}
+
+.debug-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+pre {
+    margin: 0;
+    font-family: monospace;
+    white-space: pre-wrap;
+}
